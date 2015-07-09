@@ -84,98 +84,98 @@
  </head>
 
  <body bgcolor="#e6e6e6">
- 		<div class="container "><br><br>
-					  <div class="row ">
-						  	<div class="col s12 m6 l6 offset-s0 offset-m3 offset-l3 ">
-						  			<h1 class="thin">Team task!</h1>
+    <div class="container "><br><br>
+            <div class="row ">
+                <div class="col s12 m6 l6 offset-s0 offset-m3 offset-l3 ">
+                    <h1 class="thin">Team task!</h1>
 
-						 			<div  class=" card animated fadeInUp"  >
-						                <div class="card-content black-text">
-						                  
-						                 <div class="input-field">
-								          <input id="a" type="text" >
-								          <label for="a">link of first image</label>
-								        </div>
-								        <div class="input-field">
-								          <input id="b" type="text">
-								          <label for="b">link of second image</label>
-								        </div>
-								         <a class="waves-effect waves right btn-flat" onClick="compare()">Compare</a><br><br>
-						                </div>
-						            </div>
-			             </div>
-		            </div>
-			</div>
- 		
+                  <div  class=" card animated fadeInUp"  >
+                            <div class="card-content black-text">
+                              
+                             <div class="input-field">
+                          <input id="a" type="text" >
+                          <label for="a">link of first image</label>
+                        </div>
+                        <div class="input-field">
+                          <input id="b" type="text">
+                          <label for="b">link of second image</label>
+                        </div>
+                         <a class="waves-effect waves right btn-flat" onClick="compare()">Compare</a><br><br>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+      </div>
+    
  </body>
  <script type="text/javascript">
  
  function compare(){
- 	
+  
 var a=document.getElementById("a").value;
 var b=document.getElementById("b").value;
 if(a==''){
-	document.getElementById("a").className ="invalid";
+  document.getElementById("a").className ="invalid";
 }
 else{
-	document.getElementById("a").className ="";
+  document.getElementById("a").className ="";
 }
 if(b==''){
-	document.getElementById("b").className ="invalid";
+  document.getElementById("b").className ="invalid";
 }
 else {
-	document.getElementById("b").className ="";
+  document.getElementById("b").className ="";
 }
 if(a!=''&&b!=''){
-	swal({     title: '<div id="startup"><svg class="spinner-container" width="65px" height="65px" viewBox="0 0 52 52"><circle class="path" cx="26px" cy="26px" r="20px" fill="none" stroke-width="4px"></circle></svg></div>',   html: true ,showConfirmButton: false});
-	var x = new XMLHttpRequest();
-	
+  swal({     title: '<div id="startup"><svg class="spinner-container" width="65px" height="65px" viewBox="0 0 52 52"><circle class="path" cx="26px" cy="26px" r="20px" fill="none" stroke-width="4px"></circle></svg></div>',   html: true ,showConfirmButton: false});
+  var x = new XMLHttpRequest();
+  
 x.open('GET', '//cors-anywhere.herokuapp.com/'+a);
 
 x.responseType = 'blob';
 x.onload = function() {
-	if(x.status === 200){  //check if "OK" (200)
+  if(x.status === 200){  //check if "OK" (200)
             //success
         
-			    var blob = x.response;
-			  	 var y = new XMLHttpRequest();
-				y.open('GET', '//cors-anywhere.herokuapp.com/'+b);
-				y.responseType = 'blob';
-				y.onload = function() {
-					if(y.status === 200){
-						    var blob2 = y.response;
-                var diff = resemble(blob).compareTo(blob2).onComplete();
-							diff.ignoreAntialiasing().onComplete(function(data){
-						    console.log(data);
-						    var dim=data.isSameDimensions,mmp=data.misMatchPercentage;
-						    var ser;
-						    if(dim==true && mmp==0)ser="Images are exactly same with same dimensions.";
-						    else if(mmp==0 && dim==false)ser="Images are exactly same with diffrent dimensions.";
-						    else if(dim==true)ser="Images are diffrent with same dimensions.";
-						    else if(dim==false)ser="Images are diffrent with diffrent dimensions.";
-						    swal({   title: "Super awesome analysis complete!",   text: '<div class="row"><h5>'+ser+'</h5><br><h5>'+Math.round(100-mmp)+'</h5></div><div class="row"><div class="col s2">0</div><div class="col s8 progress"><div class="determinate" style="width: '+(100-mmp)+'%"></div></div><div class="col s2">100</div></div>',   html: true, type: "success" });
-						    
-						  	});
-							} else {
-					            swal({   title: "Error!",   text: "Something went wrong. Please check links and try again.",   type: "error",   confirmButtonText: "Cool" });
-					        }
+          var blob = x.response;
+           var y = new XMLHttpRequest();
+        y.open('GET', '//cors-anywhere.herokuapp.com/'+b);
+        y.responseType = 'blob';
+        y.onload = function() {
+          if(y.status === 200){
+                var blob2 = y.response;
+              var diff = resemble(blob).compareTo(blob2).onComplete(onComplete);
 
-			};
-			y.send();
+              } else {
+                      swal({   title: "Error!",   text: "Something went wrong. Please check links and try again.",   type: "error",   confirmButtonText: "Cool" });
+                  }
 
-		
-		} else {
+      };
+      y.send();
+
+    
+    } else {
             swal({   title: "Error!",   text: "Something went wrong. Please check links and try again.",   type: "error",   confirmButtonText: "Cool" });
         }
-    	
+      
 };
 x.send();
-	
+  
 }
 
 
  }
 
-
+ function onComplete(data){
+                console.log(data);
+                var dim=data.isSameDimensions,mmp=data.misMatchPercentage;
+                var ser;
+                if(dim==true && mmp==0)ser="Images are exactly same with same dimensions.";
+                else if(mmp==0 && dim==false)ser="Images are exactly same with diffrent dimensions.";
+                else if(dim==true)ser="Images are diffrent with same dimensions.";
+                else if(dim==false)ser="Images are diffrent with diffrent dimensions.";
+                swal({   title: "Super awesome analysis complete!",   text: '<div class="row"><h5>'+ser+'</h5><br><h5>'+Math.round(100-mmp)+'</h5></div><div class="row"><div class="col s2">0</div><div class="col s8 progress"><div class="determinate" style="width: '+(100-mmp)+'%"></div></div><div class="col s2">100</div></div>',   html: true, type: "success" });
+                
+                }
  </script>
  </html>
