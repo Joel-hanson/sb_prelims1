@@ -144,7 +144,8 @@ x.onload = function() {
 				y.onload = function() {
 					if(y.status === 200){
 						    var blob2 = y.response;
-							var diff = resemble(blob).compareTo(blob2).onComplete(function(data){
+                var diff = resemble(blob).compareTo(blob2).onComplete();
+							diff.ignoreAntialiasing().onComplete(function(data){
 						    console.log(data);
 						    var dim=data.isSameDimensions,mmp=data.misMatchPercentage;
 						    var ser;
